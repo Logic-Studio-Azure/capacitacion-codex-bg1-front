@@ -46,6 +46,11 @@ export interface SimulationResult extends SimulationRequest {
   estimatedMaturityDate: string
 }
 
+export interface InvestmentOpeningRequest extends SimulationRequest {
+  investorName: string
+  investorEmail: string
+}
+
 export interface ApiFieldError { field: string; message: string }
 
 export class ApiError extends Error {

@@ -13,6 +13,8 @@ cp .env.example .env.local
 npm run dev
 ```
 
+El frontend queda disponible en `http://localhost:5173`, que es el origen permitido por el backend.
+
 La variable `VITE_API_BASE_URL` permite definir la URL del backend por ambiente. Por ejemplo, para otro host: `VITE_API_BASE_URL=https://api.ejemplo.com`.
 
 ## Comandos
@@ -29,5 +31,8 @@ npm run test      # pruebas con Vitest
 - Recarga, carga inicial, errores recuperables, estado vacío y “sin coincidencias”.
 - Simulador que consume `GET /api/products` y envía `POST /api/investments/simulations`.
 - Validaciones locales según límites y unidades del producto, además de errores de validación que responda la API.
+- Desde una simulación exitosa se puede ajustar la información o iniciar la apertura con nombre y correo.
+- La apertura consume `POST /api/investments` y muestra un comprobante en la misma pantalla; luego permite consultar “Mis inversiones”.
+- La ruta `/apertura`, disponible desde el botón superior “Apertura”, permite registrar una inversión directamente.
 
-El simulador no realiza llamadas a `POST /api/investments`; sólo consulta la proyección del endpoint de simulación.
+La apertura se habilita únicamente después de una simulación válida y registra los datos en el backend de demostración.

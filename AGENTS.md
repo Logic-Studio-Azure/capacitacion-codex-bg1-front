@@ -24,6 +24,11 @@ src/
 
 - Mantener la carpeta raiz `/`limpia solo para documentos o archivos de configuración.
 
+### Códificación TypeScript
+- Evita el uso de `any` siempre que sea posible.
+- Utiliza interfaces y tipos para mantener un código más legible y mantenible.
+- No generar código o funciones en una sola línea; busca mantener la legibilidad y claridad del código.
+
 ### Pruebas
 - Las pruebas deben estar en su proyecto dentro de la carpeta `/tests` con Vitest.
 

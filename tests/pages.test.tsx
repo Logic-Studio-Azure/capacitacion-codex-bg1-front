@@ -30,4 +30,24 @@ describe('application flows', () => {
     await waitFor(() => expect(api.simulateInvestment).toHaveBeenCalledTimes(1))
     expect(await screen.findByText('Resultado estimado')).toBeInTheDocument()
   })
+
+  it('adjusts a simulation and opens it from the result', async () => {
+    const user = userEvent.setup(); window.history.pushState({}, '', '/simular')
+    vi.mocked(api.simulateInvestment).mockResolvedValue({ productId: product.id, amount: 1000, annualRate: .06, term: 90, termUnit: 'DAYS', estimatedReturn: 14.79, estimatedFinalAmount: 1014.79, estimatedMaturityDate: '2026-04-15T10:00:00Z' })
+    vi.mocked(api.openInvestment).mockResolvedValue({ ...investment, investorName: 'Ana Pérez' })
+    render(<App />); await screen.findByText('Plazo fijo 90 días')
+    await user.type(screen.getByLabelText('Monto a invertir (USD)'), '1000'); await user.type(screen.getByLabelText('Plazo'), '90'); await user.click(screen.getByRole('button', { name: 'Simular inversión' }))
+    await screen.findByRole('button', { name: 'Abrir inversión' }); await user.click(screen.getByRole('button', { name: 'Ajustar simulación' }))
+    expect(screen.queryByText('Resultado estimado')).not.toBeInTheDocument(); await user.click(screen.getByRole('button', { name: 'Simular inversión' })); await user.click(await screen.findByRole('button', { name: 'Abrir inversión' }))
+    await user.type(screen.getByLabelText('Nombre completo'), 'Ana Pérez'); await user.type(screen.getByLabelText('Correo electrónico'), 'ana@example.com'); await user.click(screen.getByRole('button', { name: 'Confirmar apertura' }))
+    await waitFor(() => expect(api.openInvestment).toHaveBeenCalledTimes(1)); expect(await screen.findByText('Inversión abierta')).toBeInTheDocument()
+  })
+
+  it('opens an investment directly from the Apertura page', async () => {
+    const user = userEvent.setup(); window.history.pushState({}, '', '/apertura')
+    vi.mocked(api.openInvestment).mockResolvedValue(investment)
+    render(<App />); await screen.findByRole('heading', { name: 'Apertura de inversión' })
+    await user.type(screen.getByLabelText('Nombre completo'), 'Ana Pérez'); await user.type(screen.getByLabelText('Correo electrónico'), 'ana@example.com'); await user.type(screen.getByLabelText('Monto a invertir (USD)'), '1000'); await user.type(screen.getByLabelText('Plazo'), '90'); await user.click(screen.getByRole('button', { name: 'Confirmar apertura' }))
+    await waitFor(() => expect(api.openInvestment).toHaveBeenCalledTimes(1)); expect(await screen.findByText('Inversión abierta')).toBeInTheDocument()
+  })
 })

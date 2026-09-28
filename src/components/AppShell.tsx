@@ -12,6 +12,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <nav aria-label="Navegación principal" className="flex items-center gap-1 text-sm font-semibold">
           <NavLink end to="/" className={({ isActive }) => `rounded-full px-4 py-2 transition ${isActive ? 'bg-pink-50 text-magenta' : 'text-muted hover:bg-slate-50 hover:text-ink'}`}>Mis inversiones</NavLink>
           <NavLink to="/simular" className={({ isActive }) => `rounded-full px-4 py-2 transition ${isActive ? 'bg-pink-50 text-magenta' : 'text-muted hover:bg-slate-50 hover:text-ink'}`}>Simular</NavLink>
+          <NavLink to="/apertura" className={({ isActive }) => `primary-button ml-2 px-5 py-2 ${isActive ? 'ring-4 ring-pink-200' : ''}`}>Apertura</NavLink>
         </nav>
       </div>
     </header>

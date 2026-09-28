@@ -1,4 +1,4 @@
-import { ApiError, type InvestmentListResponse, type Product, type SimulationRequest, type SimulationResult } from './types'
+import { ApiError, type Investment, type InvestmentListResponse, type InvestmentOpeningRequest, type Product, type SimulationRequest, type SimulationResult } from './types'
 
 const baseUrl = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5206').replace(/\/$/, '')
 
@@ -34,6 +34,14 @@ export function getProducts() { return request<Product[]>('/api/products') }
 
 export function simulateInvestment(payload: SimulationRequest) {
   return request<SimulationResult>('/api/investments/simulations', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+}
+
+export function openInvestment(payload: InvestmentOpeningRequest) {
+  return request<Investment>('/api/investments', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
