@@ -7,3 +7,8 @@ coverage/
 
 # Archivos de MacOs
 .DS_Store
+
+# EJERCICIOS
+AGENTS.md
+README.md
+.codex/*
