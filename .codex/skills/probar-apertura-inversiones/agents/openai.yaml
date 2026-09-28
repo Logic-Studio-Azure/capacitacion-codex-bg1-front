@@ -1,6 +1,0 @@
-interface:
-  display_name: "Prueba de apertura de inversiones"
-  short_description: "Valida aperturas y plazos mínimos"
-  default_prompt: "Usa $probar-apertura-inversiones para validar la apertura de inversiones en la aplicación local."
-policy:
-  allow_implicit_invocation: true

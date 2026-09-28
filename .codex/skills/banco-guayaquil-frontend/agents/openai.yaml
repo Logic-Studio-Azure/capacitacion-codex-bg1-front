@@ -1,8 +1,0 @@
-interface:
-  display_name: "Frontend Banco Guayaquil"
-  short_description: "UI frontend inspirada en Banco Guayaquil"
-  brand_color: "#A80058"
-  default_prompt: "Usa $banco-guayaquil-frontend para diseñar esta interfaz con ese lenguaje visual."
-
-policy:
-  allow_implicit_invocation: true
