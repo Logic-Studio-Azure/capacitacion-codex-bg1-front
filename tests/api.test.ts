@@ -1,7 +1,14 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import { getInvestments, openInvestment, simulateInvestment } from '../src/services/api'
-import { ApiError } from '../src/services/types'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
+let getInvestments: typeof import('../src/services/api').getInvestments
+let openInvestment: typeof import('../src/services/api').openInvestment
+let simulateInvestment: typeof import('../src/services/api').simulateInvestment
+
+beforeAll(async () => {
+  vi.stubEnv('VITE_USE_BACKEND', '1')
+  ;({ getInvestments, openInvestment, simulateInvestment } = await import('../src/services/api'))
+})
+afterAll(() => vi.unstubAllEnvs())
 afterEach(() => vi.restoreAllMocks())
 
 describe('API client', () => {
@@ -13,7 +20,7 @@ describe('API client', () => {
 
   it('maps validation details returned by the API', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(JSON.stringify({ error: { message: 'Datos inválidos', details: [{ field: 'amount', message: 'Monto inválido' }] } }), { status: 400 }))
-    await expect(simulateInvestment({ productId: 'PF', amount: 0, term: 90, termUnit: 'DAYS' })).rejects.toMatchObject<ApiError>({ status: 400, details: [{ field: 'amount', message: 'Monto inválido' }] })
+    await expect(simulateInvestment({ productId: 'PF', amount: 0, term: 90, termUnit: 'DAYS' })).rejects.toMatchObject({ status: 400, details: [{ field: 'amount', message: 'Monto inválido' }] })
   })
 
   it('opens an investment with the personal and simulation data', async () => {

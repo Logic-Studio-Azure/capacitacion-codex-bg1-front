@@ -1,6 +1,8 @@
 import { ApiError, type Investment, type InvestmentListResponse, type InvestmentOpeningRequest, type Product, type SimulationRequest, type SimulationResult } from './types'
+import { getMockInvestments, getMockProducts, openMockInvestment, simulateMockInvestment } from './mockApi'
 
 const baseUrl = (import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5206').replace(/\/$/, '')
+const useBackend = import.meta.env.VITE_USE_BACKEND === '1'
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response
@@ -23,6 +25,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export function getInvestments(filters: { status?: string; search?: string } = {}) {
+  if (!useBackend) return getMockInvestments(filters)
   const params = new URLSearchParams()
   if (filters.status) params.set('status', filters.status)
   if (filters.search?.trim()) params.set('search', filters.search.trim())
@@ -30,9 +33,10 @@ export function getInvestments(filters: { status?: string; search?: string } = {
   return request<InvestmentListResponse>(`/api/investments${query ? `?${query}` : ''}`)
 }
 
-export function getProducts() { return request<Product[]>('/api/products') }
+export function getProducts() { return useBackend ? request<Product[]>('/api/products') : getMockProducts() }
 
 export function simulateInvestment(payload: SimulationRequest) {
+  if (!useBackend) return simulateMockInvestment(payload)
   return request<SimulationResult>('/api/investments/simulations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -41,6 +45,7 @@ export function simulateInvestment(payload: SimulationRequest) {
 }
 
 export function openInvestment(payload: InvestmentOpeningRequest) {
+  if (!useBackend) return openMockInvestment(payload)
   return request<Investment>('/api/investments', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
